@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+        <title>Demo Media Party 2017 - Google Spreadsheets Visualizer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: Arial;
+            }
+        </style>        
+        <!-- jquery -->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <!-- jquery sheet to json plugin -->
+        <script type="text/javascript" src="js/jquery-google-sheet-to-json.min.js"></script>
+        <!-- google charts library -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        
+        <script>
+        
+        $(document).ready(function() {
+                google.charts.load('current', {'packages':['corechart']});
+
+                var jsonData;
+                var arrDolar = [];
+                
+               var SPREADSHEET_ID = '1TjkqurnAU5kbUU267pksOceLXSmbF9FrtHxF_vpiR14';
+                $.googleSheetToJSON(SPREADSHEET_ID).done(function(rows) {
+                    jsonData = rows;
+                    arrDolar.push(['Día', 'Compra', 'Venta']);
+
+                    $.each(jsonData, function(key, value) {
+                        var line = [value.dia, parseFloat(value.compra), parseFloat(value.venta)];
+                        arrDolar.push(line);                         
+                    });              
+    
+                    google.charts.setOnLoadCallback(drawChart);
+                    
+                }).fail(function(err) {
+                    console.log('error!', err);
+                });
+                
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable(arrDolar);
+
+                    var options = {
+                    title: 'Evolución dólar',
+                    curveType: 'function',
+                    legend: { position: 'top' }
+                    };
+
+                    var chart = new google.visualization.LineChart(document.getElementById('visualizer_chart'));
+
+                    chart.draw(data, options);
+                }
+                            
+            });
+        
+        </script>
+		
+	</head>
+
+	<body>
+		<main>
+			<section>
+                    <div id="visualizer_chart" style="width: 900px; height: 500px"></div>
+		    </section>
+		</main>
+	</body>	
+</html>
