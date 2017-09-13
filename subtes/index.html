@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8">
+        <title>Demo Media Party 2017 - Estado red de Subte</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: Arial;
+            }
+            .linea {
+                border: solid 2px black;
+                width: 100px;
+                height: 100px;
+                text-align: center;
+                font-size: 80px;
+                background-color: white;
+                vertical-align: middle;
+                line-height: 100px;
+                float:left;
+                margin-left:10px
+            }
+
+            .A {
+                color: #4BABD9;
+            }
+
+            .B {
+                color: red;
+            }
+
+            .C {
+                color: blue;
+            }
+
+            .D { 
+                color: green;
+            }
+
+            .E { 
+                color: #805095;
+            }
+
+            .H {
+                color: yellow;
+            }
+
+            .P {
+                color: orange;
+            }
+
+            .U {
+                color: orange;
+            }
+
+            .danger {
+                background-color: red;
+                color: white;
+            }
+
+        </style>        
+        <!-- jquery -->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        
+        <script>
+        
+        $(document).ready(function() {   
+            
+            var urlApi = 'http://cors-proxy.htmldriven.com/?url=http://www.metrovias.com.ar/Subterraneos/Estado?site=Subterraneos';
+
+            $.ajax({
+                url: urlApi,
+                dataType: "json",
+                success: function (response) {
+
+                    var lineas = $.parseJSON(response.body);
+
+                    $('#cargando').hide();
+
+                   $.each(lineas, function(key, value) {
+
+                        if(value.LineStatus == 'Normal') {
+                            var l = "";
+                                l += "<div class='linea "+value.LineName+"'>";
+                                l += value.LineName;
+                                l += "</div>";
+                        } else {
+                            var l = "";
+                                l += "<div class='danger linea "+value.LineName+"'>";
+                                l += value.LineName;
+                                l += "</div>";                            
+                        }
+                        
+                        $('#lineas').append(l);
+                        
+
+                    });
+
+                },
+                error: function (xhr, status) {
+                    console.log('error');
+                }
+            });
+        });
+
+        </script>
+		
+	</head>
+
+	<body>
+		<main>
+			<section>
+                <div id="cargando">
+                    <img width="80" src="loading.gif" />
+                </div>
+                <div id="lineas">
+                </div>
+		    </section>
+		</main>
+	</body>	
+</html>
